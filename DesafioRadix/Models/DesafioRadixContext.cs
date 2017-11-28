@@ -11,10 +11,12 @@ namespace DesafioRadix.Models
         public DbSet<Book> Books { get; set; }
         public DbSet<Review> Reviews { get; set; }
 
+        /*
         public override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Book>().ToTable("Book");
             modelBuilder.Entity<Review>().ToTable("Review");
         }
+        */
     }
 }
