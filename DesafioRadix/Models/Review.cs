@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesafioRadix.Models
 {
+    /*
     public enum Evaluation
     {
-        Terrible=1, Bad, Ok, Good, Marvelous
+        Terrible, Bad, Ok, Good, Marvelous
     }
+    */
 
     public class Review
     {
@@ -18,8 +20,12 @@ namespace DesafioRadix.Models
         [ForeignKey("BookID")]
         public virtual Book Book { get; set; }
 
+        /*
         [Required]
         public Evaluation Evaluation { get; set; }
+        */
+        [Required]
+        public int Evaluation { get; set; }
 
         public string ReviewText { get; set; }
 
