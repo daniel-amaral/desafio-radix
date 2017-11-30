@@ -15,7 +15,7 @@ namespace DesafioRadix.Controllers
         {
             _context = context;
 
-            if (_context.Books.Count() == 0)
+            if (!_context.Books.Any())
             {
                 _context.Books.Add(new Book
                 {
