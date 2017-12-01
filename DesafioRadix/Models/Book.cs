@@ -1,4 +1,5 @@
 ﻿// using System;
+using DesafioRadix.Models.DTOs;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -23,7 +24,7 @@ namespace DesafioRadix.Models
 
         public double Price { get; set; }
 
-        public virtual ICollection<Review> Reviews { get; set; }
+        //public virtual ICollection<Review> Reviews { get; set; }
 
         /*
         [Required]
@@ -33,5 +34,26 @@ namespace DesafioRadix.Models
         [DefaultValue(false)]
         public bool IsExcluded { get; set; }
         */
+
+        public BookDTO ConvertToDTO()
+        {
+            return new BookDTO
+            {
+                ISBN = this.ISBN,
+                Title = this.Title,
+                Authors = this.Authors,
+                Publisher = this.Publisher,
+                Price = this.Price
+            };
+        }
+
+        public void UpdateFromDTO(BookDTO dto)
+        {
+            this.ISBN = dto.ISBN;
+            this.Title = dto.Title;
+            this.Authors = dto.Authors;
+            this.Publisher = dto.Publisher;
+            this.Price = dto.Price;
+        }
     }
 }

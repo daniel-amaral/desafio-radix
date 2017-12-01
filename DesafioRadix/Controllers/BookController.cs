@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using DesafioRadix.Models;
+using DesafioRadix.Models.DTOs;
 
 namespace DesafioRadix.Controllers
 {
@@ -41,55 +42,53 @@ namespace DesafioRadix.Controllers
             return _context.Books.ToList();
         }
 
-        [HttpGet("{id}", Name = "GetBook")]
+        [HttpGet("{id:long}", Name = "GetBookById")]
         public IActionResult GetById(long id)
         {
             var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == id);
+
             if (persistedBook == null)
-            {
                 return NotFound();
-            }
+
             return new ObjectResult(persistedBook);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Book book)
+        public IActionResult Create([FromBody] BookDTO bookDTO)
         {
-            if (book == null)
+            if (bookDTO == null)
                 return BadRequest();
 
-            _context.Books.Add(book);
+            Book createdBook = bookDTO.ConvertToBook();
+            _context.Books.Add(createdBook);
             _context.SaveChanges();
 
-            return CreatedAtRoute("GetBook", new { id = book.BookID }, book);
+            return CreatedAtRoute("GetBookById", new { id = createdBook.BookID }, createdBook);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody] Book requestBook)
+        [HttpPut("{id:long}")]
+        public IActionResult Update(long id, [FromBody] BookDTO requestBookDTO)
         {
-            if (requestBook == null || requestBook.BookID != id)
+            if (requestBookDTO == null)
                 return BadRequest();
 
             var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == id);
+
             if (persistedBook == null)
                 return NotFound();
 
-            persistedBook.ISBN = requestBook.ISBN;
-            persistedBook.Title = requestBook.Title;
-            persistedBook.Authors = requestBook.Title;
-            persistedBook.Publisher = requestBook.Publisher;
-            persistedBook.Price = requestBook.Price;
-
+            persistedBook.UpdateFromDTO(requestBookDTO);
             _context.Books.Update(persistedBook);
             _context.SaveChanges();
 
             return new NoContentResult();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         public IActionResult Delete(long id)
         {
             var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == id);
+
             if (persistedBook == null)
                 return NotFound();
 

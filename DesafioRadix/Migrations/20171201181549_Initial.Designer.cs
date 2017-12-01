@@ -11,7 +11,7 @@ using System;
 namespace DesafioRadix.Migrations
 {
     [DbContext(typeof(DesafioRadixContext))]
-    [Migration("20171130012239_Initial")]
+    [Migration("20171201181549_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,7 +39,7 @@ namespace DesafioRadix.Migrations
 
                     b.HasKey("BookID");
 
-                    b.ToTable("Books");
+                    b.ToTable("Book");
                 });
 
             modelBuilder.Entity("DesafioRadix.Models.Review", b =>
@@ -47,8 +47,7 @@ namespace DesafioRadix.Migrations
                     b.Property<long>("ReviewID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long?>("BookID")
-                        .IsRequired();
+                    b.Property<long>("BookID");
 
                     b.Property<int>("Evaluation");
 
@@ -60,13 +59,13 @@ namespace DesafioRadix.Migrations
 
                     b.HasIndex("BookID");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Review");
                 });
 
             modelBuilder.Entity("DesafioRadix.Models.Review", b =>
                 {
                     b.HasOne("DesafioRadix.Models.Book", "Book")
-                        .WithMany("Reviews")
+                        .WithMany()
                         .HasForeignKey("BookID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
