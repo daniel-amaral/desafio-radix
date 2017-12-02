@@ -1,4 +1,5 @@
 ﻿using DesafioRadix.Models.DTOs;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,8 +26,28 @@ namespace DesafioRadix.Models.Entities
         [Required]
         public Evaluation Evaluation { get; set; }
         */
+
+        private int _evaluation;
         [Required]
-        public int Evaluation { get; set; }
+        public int Evaluation
+        {
+            get
+            {
+                return _evaluation;
+            }
+            set
+            {
+                if (value >= 0 && value <= 10)
+                {
+                    _evaluation = value;
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+
+            }
+        }
 
         public string ReviewText { get; set; }
 
@@ -34,7 +55,8 @@ namespace DesafioRadix.Models.Entities
 
         public ReviewDTO ConvertToDTO()
         {
-            return new ReviewDTO {
+            return new ReviewDTO
+            {
                 BookID = this.Book.BookID,
                 Evaluation = this.Evaluation,
                 ReviewText = this.ReviewText,

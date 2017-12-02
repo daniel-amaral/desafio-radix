@@ -55,5 +55,15 @@ namespace DesafioRadix.Models.Entities
             this.Publisher = dto.Publisher;
             this.Price = dto.Price;
         }
+
+        public override string ToString()
+        {
+            return "{BookID: " + BookID + ", " +
+                "ISBN: " + ISBN + ", " +
+                "Title: " + Title + ", " +
+                "Authors: " + Authors + ", " +
+                "Publisher: " + Publisher + ", " +
+                "Price: " + Price + "}";
+        }
     }
 }

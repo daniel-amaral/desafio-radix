@@ -49,7 +49,8 @@ namespace DesafioRadix.Migrations
 
                     b.Property<long>("BookID");
 
-                    b.Property<int>("Evaluation");
+                    b.Property<int?>("Evaluation")
+                        .IsRequired();
 
                     b.Property<string>("ReviewAuthor");
 

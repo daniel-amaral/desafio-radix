@@ -88,11 +88,18 @@ namespace DesafioRadix.Controllers
             if (reviewBook == null)
                 return BadRequest();
 
-            Review createdReview = requestReviewDTO.ConvertToReview(reviewBook);
-            _context.Reviews.Add(createdReview);
-            _context.SaveChanges();
+            try
+            {
+                Review createdReview = requestReviewDTO.ConvertToReview(reviewBook);
+                _context.Reviews.Add(createdReview);
+                _context.SaveChanges();
+                return CreatedAtRoute("GetReviewById", new { id = createdReview.ReviewID }, createdReview);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                return BadRequest(e.Message);
+            }
 
-            return CreatedAtRoute("GetReviewById", new { id = createdReview.ReviewID }, createdReview);
         }
 
         [HttpPut("{id}")]
@@ -110,11 +117,18 @@ namespace DesafioRadix.Controllers
             if (reviewBook == null)
                 return BadRequest();
 
-            persistedReview.UpdateFromDTO(requestReviewDTO, reviewBook);
-            _context.Reviews.Update(persistedReview);
-            _context.SaveChanges();
+            try
+            {
+                persistedReview.UpdateFromDTO(requestReviewDTO, reviewBook);
+                _context.Reviews.Update(persistedReview);
+                _context.SaveChanges();
+                return new NoContentResult();
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                return BadRequest(e.Message);
+            }
 
-            return new NoContentResult();
         }
 
         [HttpDelete("{id}")]

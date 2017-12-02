@@ -27,5 +27,13 @@ namespace DesafioRadix.Models.DTOs
                 ReviewAuthor = this.ReviewAuthor
             };
         }
+
+        public override string ToString()
+        {
+            return "{BookID: " + BookID + ", " +
+                "Evaluation: " + Evaluation + ", " +
+                "ReviewText: " + ReviewText + ", " +
+                "ReviewAuthor: " + ReviewAuthor + "}";
+        }
     }
 }

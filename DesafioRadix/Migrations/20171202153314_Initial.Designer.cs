@@ -11,8 +11,8 @@ using System;
 namespace DesafioRadix.Migrations
 {
     [DbContext(typeof(DesafioRadixContext))]
-    [Migration("20171202035509_initial")]
-    partial class initial
+    [Migration("20171202153314_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,7 +50,8 @@ namespace DesafioRadix.Migrations
 
                     b.Property<long>("BookID");
 
-                    b.Property<int>("Evaluation");
+                    b.Property<int?>("Evaluation")
+                        .IsRequired();
 
                     b.Property<string>("ReviewAuthor");
 
