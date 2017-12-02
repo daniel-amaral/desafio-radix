@@ -6,38 +6,32 @@ using DesafioRadix.Models;
 using Microsoft.EntityFrameworkCore;
 using DesafioRadix.Models.Entities;
 using DesafioRadix.Models.DTOs;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace DesafioRadix.Controllers
 {
+    /// <summary>
+    /// Review Controller
+    /// </summary>
     [Produces("application/json")]
     [Route("api/review")]
     public class ReviewController : Controller
     {
         private readonly DesafioRadixContext _context;
 
-        public ReviewController(DesafioRadixContext context)
-        {
-            _context = context;
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="context"></param>
+        public ReviewController(DesafioRadixContext context) => _context = context;
 
-            if (!_context.Reviews.Any())
-            {
-                long bookId = 1;
-                var book = _context.Books.FirstOrDefault(b => b.BookID == bookId);
-                _context.Reviews.Add(new Review
-                {
-                    Evaluation = 10,
-                    Book = book
-                });
-                _context.Reviews.Add(new Review
-                {
-                    Evaluation = 9,
-                    Book = book
-                });
-
-                _context.SaveChanges();
-            }
-        }
-
+        /// <summary>
+        /// Get all Reviews, with pagination
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         [HttpGet("count/{count}/page/{page}")]
         public IActionResult GetAll(int count, int page)
         {
@@ -66,17 +60,26 @@ namespace DesafioRadix.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}", Name = "GetReviewById")]
-        public IActionResult GetReviewById(long id)
+        /// <summary>
+        /// Get a Review by ID
+        /// </summary>
+        /// <param name="reviewId"></param>
+        [HttpGet("{reviewId}", Name = "GetReviewById")]
+        public IActionResult GetReviewById(long reviewId)
         {
             var persistedReview = _context.Reviews
                 .Include(r => r.Book)
-                .FirstOrDefault(r => r.ReviewID == id);
+                .FirstOrDefault(r => r.ReviewID == reviewId);
             if (persistedReview == null)
                 return NotFound();
             return new ObjectResult(persistedReview);
         }
 
+        /// <summary>
+        /// Create a new Review
+        /// </summary>
+        /// <param name="requestReviewDTO"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Create([FromBody] ReviewDTO requestReviewDTO)
         {
@@ -102,13 +105,19 @@ namespace DesafioRadix.Controllers
 
         }
 
+        /// <summary>
+        /// Update an existing Review
+        /// </summary>
+        /// <param name="reviewId"></param>
+        /// <param name="requestReviewDTO"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody] ReviewDTO requestReviewDTO)
+        public IActionResult Update(long reviewId, [FromBody] ReviewDTO requestReviewDTO)
         {
             if (requestReviewDTO == null)
                 return BadRequest();
 
-            var persistedReview = _context.Reviews.FirstOrDefault(r => r.ReviewID == id);
+            var persistedReview = _context.Reviews.FirstOrDefault(r => r.ReviewID == reviewId);
             if (persistedReview == null)
                 return NotFound();
 
@@ -131,10 +140,15 @@ namespace DesafioRadix.Controllers
 
         }
 
+        /// <summary>
+        /// Delete a Review
+        /// </summary>
+        /// <param name="reviewId"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        public IActionResult Delete(long reviewId)
         {
-            var persistedReview = _context.Reviews.FirstOrDefault(r => r.ReviewID == id);
+            var persistedReview = _context.Reviews.FirstOrDefault(r => r.ReviewID == reviewId);
             if (persistedReview == null)
                 return NotFound();
 
@@ -144,6 +158,13 @@ namespace DesafioRadix.Controllers
             return new NoContentResult();
         }
 
+        /// <summary>
+        /// Get all Reviews from a specific Book, with pagination
+        /// </summary>
+        /// <param name="bookId"></param>
+        /// <param name="count"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         [HttpGet("{bookId}/reviews/count/{count}/page/{page}")]
         public IActionResult GetReviewsByBookId(long bookId, int count, int page)
         {

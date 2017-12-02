@@ -8,36 +8,30 @@ using System;
 
 namespace DesafioRadix.Controllers
 {
+    /// <summary>
+    /// Book Controller
+    /// </summary>
     [Produces("application/json")]
     [Route("api/book")]
     public class BookController : Controller
     {
         private readonly DesafioRadixContext _context;
 
+        /// <summary>
+        /// class constructor
+        /// </summary>
+        /// <param name="context"></param>
         public BookController(DesafioRadixContext context)
         {
-            _context = context;
-
-            if (!_context.Books.Any())
-            {
-                _context.Books.Add(new Book
-                {
-                    ISBN = "1111111-1",
-                    Title = "Test title",
-                    Price = 123.34,
-                    // Authors = "Test authors"
-                });
-                _context.Books.Add(new Book
-                {
-                    ISBN = "22222222-2",
-                    Title = "Test title2",
-                    Price = 234.35,
-                    // Authors = "Test authors"
-                });
-                _context.SaveChanges();
-            }
+            _context = context;            
         }
 
+        /// <summary>
+        /// Get all Books, with pagination
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         [HttpGet("count/{count}/page/{page}")]
         public IActionResult GetAll(int count, int page)
         {
@@ -66,10 +60,13 @@ namespace DesafioRadix.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}", Name = "GetBookById")]
-        public IActionResult GetById(long id)
+        /// <summary>
+        /// Get a Book by ID
+        /// </summary>
+        [HttpGet("{bookId}", Name = "GetBookById")]
+        public IActionResult GetById(long bookId)
         {
-            var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == id);
+            var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == bookId);
 
             if (persistedBook == null)
                 return NotFound();
@@ -77,6 +74,9 @@ namespace DesafioRadix.Controllers
             return new ObjectResult(persistedBook);
         }
 
+        /// <summary>
+        /// Create a new Book
+        /// </summary>
         [HttpPost]
         public IActionResult Create([FromBody] BookDTO bookDTO)
         {
@@ -90,13 +90,16 @@ namespace DesafioRadix.Controllers
             return CreatedAtRoute("GetBookById", new { id = createdBook.BookID }, createdBook);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody] BookDTO requestBookDTO)
+        /// <summary>
+        /// Update a Book
+        /// </summary>
+        [HttpPut("{bookId}")]
+        public IActionResult Update(long bookId, [FromBody] BookDTO requestBookDTO)
         {
             if (requestBookDTO == null)
                 return BadRequest();
 
-            var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == id);
+            var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == bookId);
 
             if (persistedBook == null)
                 return NotFound();
@@ -108,10 +111,13 @@ namespace DesafioRadix.Controllers
             return new NoContentResult();
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        /// <summary>
+        /// Delete a Book
+        /// </summary>
+        [HttpDelete("{bookId}")]
+        public IActionResult Delete(long bookId)
         {
-            var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == id);
+            var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == bookId);
 
             if (persistedBook == null)
                 return NotFound();

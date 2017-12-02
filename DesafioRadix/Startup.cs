@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using DesafioRadix.Models;
 using DesafioRadix.Models.Entities;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +13,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.PlatformAbstractions;
 
 /*
 using MySqlDotnetCore.Data;
@@ -52,6 +55,11 @@ namespace DesafioRadix
                     Version = "v1",
                     Contact = new Contact { Name = "Daniel Amaral" }
                 });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                var xmlPath = Path.Combine(basePath, "DesafioRadix.xml");
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
