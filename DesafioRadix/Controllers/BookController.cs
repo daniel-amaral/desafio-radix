@@ -22,14 +22,14 @@ namespace DesafioRadix.Controllers
             {
                 _context.Books.Add(new Book
                 {
-                    ISBN = 111,
+                    ISBN = "1111111-1",
                     Title = "Test title",
                     Price = 123.34,
                     // Authors = "Test authors"
                 });
                 _context.Books.Add(new Book
                 {
-                    ISBN = 222,
+                    ISBN = "22222222-2",
                     Title = "Test title2",
                     Price = 234.35,
                     // Authors = "Test authors"

@@ -12,7 +12,7 @@ namespace DesafioRadix.Models.DTOs
          * Omits the 'BookId' atribute 
          */
 
-        public long ISBN { get; set; }
+        public string ISBN { get; set; }
         public string Title { get; set; }
         public string Authors { get; set; }
         public string Publisher { get; set; }

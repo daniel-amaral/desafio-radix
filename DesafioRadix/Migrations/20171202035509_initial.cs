@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DesafioRadix.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace DesafioRadix.Migrations
                     BookID = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Authors = table.Column<string>(nullable: true),
-                    ISBN = table.Column<long>(nullable: false),
+                    ISBN = table.Column<string>(nullable: false),
                     Price = table.Column<double>(nullable: false),
                     Publisher = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: false)

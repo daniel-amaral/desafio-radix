@@ -20,14 +20,15 @@ namespace DesafioRadix.Migrations
                 .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
-            modelBuilder.Entity("DesafioRadix.Models.Book", b =>
+            modelBuilder.Entity("DesafioRadix.Models.Entities.Book", b =>
                 {
                     b.Property<long>("BookID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Authors");
 
-                    b.Property<long>("ISBN");
+                    b.Property<string>("ISBN")
+                        .IsRequired();
 
                     b.Property<double>("Price");
 
@@ -41,7 +42,7 @@ namespace DesafioRadix.Migrations
                     b.ToTable("Book");
                 });
 
-            modelBuilder.Entity("DesafioRadix.Models.Review", b =>
+            modelBuilder.Entity("DesafioRadix.Models.Entities.Review", b =>
                 {
                     b.Property<long>("ReviewID")
                         .ValueGeneratedOnAdd();
@@ -61,9 +62,9 @@ namespace DesafioRadix.Migrations
                     b.ToTable("Review");
                 });
 
-            modelBuilder.Entity("DesafioRadix.Models.Review", b =>
+            modelBuilder.Entity("DesafioRadix.Models.Entities.Review", b =>
                 {
-                    b.HasOne("DesafioRadix.Models.Book", "Book")
+                    b.HasOne("DesafioRadix.Models.Entities.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookID")
                         .OnDelete(DeleteBehavior.Cascade);

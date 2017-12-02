@@ -13,7 +13,7 @@ namespace DesafioRadix.Models.Entities
         public long BookID { get; set; }
 
         [Required]
-        public long ISBN { get; set; }
+        public string ISBN { get; set; }
 
         [Required]
         public string Title { get; set; }
