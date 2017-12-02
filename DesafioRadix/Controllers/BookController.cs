@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using DesafioRadix.Models;
+using DesafioRadix.Models.Entities;
 using DesafioRadix.Models.DTOs;
+using System;
 
 namespace DesafioRadix.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/book")]
     public class BookController : Controller
     {
         private readonly DesafioRadixContext _context;
@@ -36,13 +38,35 @@ namespace DesafioRadix.Controllers
             }
         }
 
-        [HttpGet]
-        public IEnumerable<Book> GetAll()
+        [HttpGet("count/{count}/page/{page}")]
+        public IActionResult GetAll(int count, int page)
         {
-            return _context.Books.ToList();
+
+            if (count <= 0 || page <= 0)
+                return BadRequest();
+
+            int totalOfItensPersisted = _context.Books.Count();
+            if (totalOfItensPersisted > 0)
+            {
+                int numOfItensToBeReturned = count > totalOfItensPersisted ? totalOfItensPersisted : count;
+                int pageOffset = page - 1;
+                int totalOfPages = (int)Math.Ceiling((double)totalOfItensPersisted / numOfItensToBeReturned);
+                IEnumerable<Book> paginatedQuery =
+                    _context.Books
+                        .OrderBy(b => b.BookID)
+                        .Skip(pageOffset * numOfItensToBeReturned)
+                        .Take(numOfItensToBeReturned)
+                        .ToList();
+
+                PaginatedResult<Book> paginatedResponse = new PaginatedResult<Book>
+                    (paginatedQuery, totalOfItensPersisted, page,
+                     paginatedQuery.Count(), totalOfPages);
+                return new ObjectResult(paginatedResponse);
+            }
+            return NoContent();
         }
 
-        [HttpGet("{id:long}", Name = "GetBookById")]
+        [HttpGet("{id}", Name = "GetBookById")]
         public IActionResult GetById(long id)
         {
             var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == id);
@@ -66,7 +90,7 @@ namespace DesafioRadix.Controllers
             return CreatedAtRoute("GetBookById", new { id = createdBook.BookID }, createdBook);
         }
 
-        [HttpPut("{id:long}")]
+        [HttpPut("{id}")]
         public IActionResult Update(long id, [FromBody] BookDTO requestBookDTO)
         {
             if (requestBookDTO == null)
@@ -84,7 +108,7 @@ namespace DesafioRadix.Controllers
             return new NoContentResult();
         }
 
-        [HttpDelete("{id:long}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
             var persistedBook = _context.Books.FirstOrDefault(b => b.BookID == id);

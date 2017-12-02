@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using DesafioRadix.Models;
 using Microsoft.EntityFrameworkCore;
+using DesafioRadix.Models.Entities;
 using DesafioRadix.Models.DTOs;
 
 namespace DesafioRadix.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/review")]
     public class ReviewController : Controller
     {
         private readonly DesafioRadixContext _context;
@@ -37,17 +38,35 @@ namespace DesafioRadix.Controllers
             }
         }
 
-        [HttpGet]
-        public IEnumerable<Review> GetAll()
+        [HttpGet("count/{count}/page/{page}")]
+        public IActionResult GetAll(int count, int page)
         {
-            IEnumerable<Review> allPersistedReviews =
-                _context.Reviews
-                    .Include(r => r.Book)
-                    .ToList();
-            return allPersistedReviews;
+            if (count <= 0 || page <= 0)
+                return BadRequest();
+
+            int totalOfItensPersisted = _context.Reviews.Count();
+            if (totalOfItensPersisted > 0)
+            {
+                int numOfItensToBeReturned = count > totalOfItensPersisted ? totalOfItensPersisted : count;
+                int pageOffset = page - 1;
+                int totalOfPages = (int)Math.Ceiling((double)totalOfItensPersisted / numOfItensToBeReturned);
+                IEnumerable<Review> paginatedQuery =
+                    _context.Reviews
+                        .OrderBy(r => r.ReviewID)
+                        .Skip(pageOffset * numOfItensToBeReturned)
+                        .Take(numOfItensToBeReturned)
+                        .Include(r => r.Book)
+                        .ToList();
+
+                PaginatedResult<Review> paginatedResponse = new PaginatedResult<Review>
+                    (paginatedQuery, totalOfItensPersisted, page,
+                     paginatedQuery.Count(), totalOfPages);
+                return new ObjectResult(paginatedResponse);
+            }
+            return NoContent();
         }
 
-        [HttpGet("{id:long}", Name = "GetReviewById")]
+        [HttpGet("{id}", Name = "GetReviewById")]
         public IActionResult GetReviewById(long id)
         {
             var persistedReview = _context.Reviews
@@ -76,7 +95,7 @@ namespace DesafioRadix.Controllers
             return CreatedAtRoute("GetReviewById", new { id = createdReview.ReviewID }, createdReview);
         }
 
-        [HttpPut("{id:long}")]
+        [HttpPut("{id}")]
         public IActionResult Update(long id, [FromBody] ReviewDTO requestReviewDTO)
         {
             if (requestReviewDTO == null)
@@ -98,7 +117,7 @@ namespace DesafioRadix.Controllers
             return new NoContentResult();
         }
 
-        [HttpDelete("{id:long}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
             var persistedReview = _context.Reviews.FirstOrDefault(r => r.ReviewID == id);
@@ -111,16 +130,34 @@ namespace DesafioRadix.Controllers
             return new NoContentResult();
         }
 
-        [HttpGet("{bookId:long}/reviews")]
-        public IActionResult GetReviewsByBookId(long bookId)
+        [HttpGet("{bookId}/reviews/count/{count}/page/{page}")]
+        public IActionResult GetReviewsByBookId(long bookId, int count, int page)
         {
-            IEnumerable<Review> persistedReviews =
-                _context.Reviews
-                .Where(r => r.Book.BookID == bookId)
-                .Include(r => r.Book);
 
-            if (persistedReviews.Any())
-                return new ObjectResult(persistedReviews);
+            if (count <= 0 || page <= 0)
+                return BadRequest();
+
+            int totalOfItensPersisted = _context.Reviews.Where(r => r.Book.BookID == bookId).Count();
+            if (totalOfItensPersisted > 0)
+            {
+                int numOfItensToBeReturned = count > totalOfItensPersisted ? totalOfItensPersisted : count;
+                int pageOffset = page - 1;
+                int totalOfPages = (int)Math.Ceiling((double)totalOfItensPersisted / numOfItensToBeReturned);
+                IEnumerable<Review> paginatedQuery =
+                    _context.Reviews
+                        .OrderBy(r => r.ReviewID)
+                        .Where(r => r.Book.BookID == bookId)
+                        .Skip(pageOffset * numOfItensToBeReturned)
+                        .Take(numOfItensToBeReturned)
+                        .Include(r => r.Book)
+                        .ToList();
+
+                PaginatedResult<Review> paginatedResponse = new PaginatedResult<Review>
+                    (paginatedQuery, totalOfItensPersisted, page,
+                     paginatedQuery.Count(), totalOfPages);
+
+                return new ObjectResult(paginatedResponse);
+            }
 
             return NoContent();
         }

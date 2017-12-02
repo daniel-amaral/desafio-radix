@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using DesafioRadix.Models.Entities;
 
 namespace DesafioRadix.Models
 {

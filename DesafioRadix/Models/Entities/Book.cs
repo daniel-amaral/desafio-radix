@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace DesafioRadix.Models
+namespace DesafioRadix.Models.Entities
 {
     public class Book
     {

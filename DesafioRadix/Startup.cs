@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using DesafioRadix.Models;
+using DesafioRadix.Models.Entities;
 using Microsoft.Extensions.Configuration;
 
 /*

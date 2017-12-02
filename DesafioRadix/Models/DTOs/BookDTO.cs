@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DesafioRadix.Models.Entities;
 
 namespace DesafioRadix.Models.DTOs
 {
