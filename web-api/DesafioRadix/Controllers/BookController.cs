@@ -27,7 +27,7 @@ namespace DesafioRadix.Controllers
         }
 
         /// <summary>
-        /// Get all Books, with pagination
+        /// Get all books, with pagination
         /// </summary>
         /// <param name="count"></param>
         /// <param name="page"></param>
@@ -40,28 +40,25 @@ namespace DesafioRadix.Controllers
                 return BadRequest();
 
             int totalOfItensPersisted = _context.Books.Count();
-            if (totalOfItensPersisted > 0)
-            {
-                int numOfItensToBeReturned = count > totalOfItensPersisted ? totalOfItensPersisted : count;
-                int pageOffset = page - 1;
-                int totalOfPages = (int)Math.Ceiling((double)totalOfItensPersisted / numOfItensToBeReturned);
-                IEnumerable<Book> paginatedQuery =
-                    _context.Books
-                        .OrderBy(b => b.BookID)
-                        .Skip(pageOffset * numOfItensToBeReturned)
-                        .Take(numOfItensToBeReturned)
-                        .ToList();
+            int numOfItensToBeReturned = count > totalOfItensPersisted ? totalOfItensPersisted : count;
+            int pageOffset = page - 1;
+            int totalOfPages = numOfItensToBeReturned == 0 ?
+                0 : (int)Math.Ceiling((double)totalOfItensPersisted / numOfItensToBeReturned);
+            IEnumerable<Book> paginatedQuery =
+                _context.Books
+                    .OrderBy(b => b.BookID)
+                    .Skip(pageOffset * numOfItensToBeReturned)
+                    .Take(numOfItensToBeReturned)
+                    .ToList();
 
-                PaginatedResult<Book> paginatedResponse = new PaginatedResult<Book>
-                    (paginatedQuery, totalOfItensPersisted, page,
-                     paginatedQuery.Count(), totalOfPages);
-                return new ObjectResult(paginatedResponse);
-            }
-            return NoContent();
+            PaginatedResult<Book> paginatedResponse = new PaginatedResult<Book>
+                (paginatedQuery, totalOfItensPersisted, page,
+                    paginatedQuery.Count(), totalOfPages);
+            return new ObjectResult(paginatedResponse);
         }
 
         /// <summary>
-        /// Get a Book by ID
+        /// Get a book by ID
         /// </summary>
         [HttpGet("{bookId}", Name = "GetBookById")]
         public IActionResult GetById(long bookId)
@@ -75,7 +72,119 @@ namespace DesafioRadix.Controllers
         }
 
         /// <summary>
-        /// Create a new Book
+        /// Find books by its title, with pagination
+        /// </summary>
+        [HttpGet("title/{bookTitle}/count/{count}/page/{page}")]
+        public IActionResult GetBooksByTitle(string bookTitle, int count, int page)
+        {
+            if (count <= 0 || page <= 0)
+                return BadRequest();
+
+            int totalOfItensPersisted = _context.Books.Where(b => b.Title.Contains(bookTitle)).Count();
+            int numOfItensToBeReturned = count > totalOfItensPersisted ? totalOfItensPersisted : count;
+            int pageOffset = page - 1;
+            int totalOfPages = numOfItensToBeReturned == 0 ?
+                0 : (int)Math.Ceiling((double)totalOfItensPersisted / numOfItensToBeReturned);
+            IEnumerable<Book> paginatedQuery =
+                _context.Books
+                    .OrderBy(b => b.BookID)
+                    .Where(b => b.Title.Contains(bookTitle))
+                    .Skip(pageOffset * numOfItensToBeReturned)
+                    .Take(numOfItensToBeReturned)
+                    .ToList();
+
+            PaginatedResult<Book> paginatedResponse = new PaginatedResult<Book>
+                (paginatedQuery, totalOfItensPersisted, page,
+                    paginatedQuery.Count(), totalOfPages);
+            return new ObjectResult(paginatedResponse);
+        }
+
+        /// <summary>
+        /// Find books by author's name, with pagination
+        /// </summary>
+        [HttpGet("author/{authorName}/count/{count}/page/{page}")]
+        public IActionResult GetBooksByAuthorName(string authorName, int count, int page)
+        {
+            if (count <= 0 || page <= 0)
+                return BadRequest();
+
+            int totalOfItensPersisted = _context.Books.Where(b => b.Authors.Contains(authorName)).Count();
+            int numOfItensToBeReturned = count > totalOfItensPersisted ? totalOfItensPersisted : count;
+            int pageOffset = page - 1;
+            int totalOfPages = numOfItensToBeReturned == 0 ?
+                0 : (int)Math.Ceiling((double)totalOfItensPersisted / numOfItensToBeReturned);
+            IEnumerable<Book> paginatedQuery =
+                _context.Books
+                    .OrderBy(b => b.BookID)
+                    .Where(b => b.Authors.Contains(authorName))
+                    .Skip(pageOffset * numOfItensToBeReturned)
+                    .Take(numOfItensToBeReturned)
+                    .ToList();
+
+            PaginatedResult<Book> paginatedResponse = new PaginatedResult<Book>
+                (paginatedQuery, totalOfItensPersisted, page,
+                    paginatedQuery.Count(), totalOfPages);
+            return new ObjectResult(paginatedResponse);
+        }
+
+        /// <summary>
+        /// Find books by publisher, with pagination
+        /// </summary>
+        [HttpGet("publisher/{publisher}/count/{count}/page/{page}")]
+        public IActionResult GetBooksByPublisher(string publisher, int count, int page)
+        {
+            if (count <= 0 || page <= 0)
+                return BadRequest();
+
+            int totalOfItensPersisted = _context.Books.Where(b => b.Publisher.Contains(publisher)).Count();
+            int numOfItensToBeReturned = count > totalOfItensPersisted ? totalOfItensPersisted : count;
+            int pageOffset = page - 1;
+            int totalOfPages = numOfItensToBeReturned == 0 ?
+                0 : (int)Math.Ceiling((double)totalOfItensPersisted / numOfItensToBeReturned);
+            IEnumerable<Book> paginatedQuery =
+                _context.Books
+                    .OrderBy(b => b.BookID)
+                    .Where(b => b.Publisher.Contains(publisher))
+                    .Skip(pageOffset * numOfItensToBeReturned)
+                    .Take(numOfItensToBeReturned)
+                    .ToList();
+
+            PaginatedResult<Book> paginatedResponse = new PaginatedResult<Book>
+                (paginatedQuery, totalOfItensPersisted, page,
+                    paginatedQuery.Count(), totalOfPages);
+            return new ObjectResult(paginatedResponse);
+        }
+
+        /// <summary>
+        /// Find books by ISBN, with pagination
+        /// </summary>
+        [HttpGet("isbn/{isbn}/count/{count}/page/{page}")]
+        public IActionResult GetBooksByISBN(string isbn, int count, int page)
+        {
+            if (count <= 0 || page <= 0)
+                return BadRequest();
+
+            int totalOfItensPersisted = _context.Books.Where(b => b.ISBN.Contains(isbn)).Count();
+            int numOfItensToBeReturned = count > totalOfItensPersisted ? totalOfItensPersisted : count;
+            int pageOffset = page - 1;
+            int totalOfPages = numOfItensToBeReturned == 0 ?
+                0 : (int)Math.Ceiling((double)totalOfItensPersisted / numOfItensToBeReturned);
+            IEnumerable<Book> paginatedQuery =
+                _context.Books
+                    .OrderBy(b => b.BookID)
+                    .Where(b => b.ISBN.Contains(isbn))
+                    .Skip(pageOffset * numOfItensToBeReturned)
+                    .Take(numOfItensToBeReturned)
+                    .ToList();
+
+            PaginatedResult<Book> paginatedResponse = new PaginatedResult<Book>
+                (paginatedQuery, totalOfItensPersisted, page,
+                    paginatedQuery.Count(), totalOfPages);
+            return new ObjectResult(paginatedResponse);
+        }
+
+        /// <summary>
+        /// Create a new book
         /// </summary>
         [HttpPost]
         public IActionResult Create([FromBody] BookDTO bookDTO)
@@ -91,7 +200,7 @@ namespace DesafioRadix.Controllers
         }
 
         /// <summary>
-        /// Update a Book
+        /// Update a book
         /// </summary>
         [HttpPut("{bookId}")]
         public IActionResult Update(long bookId, [FromBody] BookDTO requestBookDTO)
@@ -112,7 +221,7 @@ namespace DesafioRadix.Controllers
         }
 
         /// <summary>
-        /// Delete a Book
+        /// Delete a book
         /// </summary>
         [HttpDelete("{bookId}")]
         public IActionResult Delete(long bookId)
