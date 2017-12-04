@@ -24,10 +24,13 @@ RUN rpmkeys --import https://repo.mysql.com/RPM-GPG-KEY-mysql \
   && mkdir /docker-entrypoint-initdb.d
 
 VOLUME /var/lib/mysql
-RUN apt-get update && apt-get install -y dos2unix
 COPY docker-entrypoint.sh /entrypoint.sh
 COPY healthcheck.sh /healthcheck.sh
-RUN dos2unix /entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
+
+RUN yum install -y dos2unix
+RUN dos2unix /entrypoint.sh
+RUN dos2unix /healthcheck.sh
+
 ENTRYPOINT ["/entrypoint.sh"]
 HEALTHCHECK CMD /healthcheck.sh
 EXPOSE 3306 33060
