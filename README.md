@@ -22,5 +22,7 @@ Acesse a página gerada pelo Swagger para conferir todos os endpoints e seus con
 ![Swagger](https://github.com/daniel-amaral/desafio-radix/blob/master/web-api/swagger-screen.PNG)
 
 
+##### Observação
+O Docker Compose irá criar dois conteiners, um para o banco de dados e o outro para a API. O container do banco de dados será criado primeiro, mas no primeiro build pode acontecer de o container da API ser criado antes que o container do bando de dados esteja pronto. Neste caso, a API será encerrada, mas o servidor de banco de dados continuará rodando e será corretamente montado. Neste caso, numa segunda execução de `docker-compose up` o container do bando de dados já estará pronto e o sistema funcionará normalmente.
 
 Obrigado! **:)**
