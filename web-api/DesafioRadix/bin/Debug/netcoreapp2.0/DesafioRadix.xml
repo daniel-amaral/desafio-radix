@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DesafioRadix</name>
+    </assembly>
+    <members>
+        <member name="T:DesafioRadix.Controllers.BookController">
+            <summary>
+            Book Controller
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.BookController.#ctor(DesafioRadix.Models.DesafioRadixContext)">
+            <summary>
+            class constructor
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:DesafioRadix.Controllers.BookController.GetAll(System.Int32,System.Int32)">
+            <summary>
+            Get all books, with pagination
+            </summary>
+            <param name="count"></param>
+            <param name="page"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DesafioRadix.Controllers.BookController.GetById(System.Int64)">
+            <summary>
+            Get a book by ID
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.BookController.GetBooksByTitle(System.String,System.Int32,System.Int32)">
+            <summary>
+            Find books by its title, with pagination
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.BookController.GetBooksByAuthorName(System.String,System.Int32,System.Int32)">
+            <summary>
+            Find books by author's name, with pagination
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.BookController.GetBooksByPublisher(System.String,System.Int32,System.Int32)">
+            <summary>
+            Find books by publisher, with pagination
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.BookController.GetBooksByISBN(System.String,System.Int32,System.Int32)">
+            <summary>
+            Find books by ISBN, with pagination
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.BookController.Create(DesafioRadix.Models.DTOs.BookDTO)">
+            <summary>
+            Create a new book
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.BookController.Update(System.Int64,DesafioRadix.Models.DTOs.BookDTO)">
+            <summary>
+            Update a book
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.BookController.Delete(System.Int64)">
+            <summary>
+            Delete a book
+            </summary>
+        </member>
+        <member name="T:DesafioRadix.Controllers.ReviewController">
+            <summary>
+            Review Controller
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.ReviewController.#ctor(DesafioRadix.Models.DesafioRadixContext)">
+            <summary>
+            Class constructor
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:DesafioRadix.Controllers.ReviewController.GetAll(System.Int32,System.Int32)">
+            <summary>
+            Get all reviews, with pagination
+            </summary>
+            <param name="count"></param>
+            <param name="page"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DesafioRadix.Controllers.ReviewController.GetReviewById(System.Int64)">
+            <summary>
+            Get a review by ID
+            </summary>
+            <param name="reviewId"></param>
+        </member>
+        <member name="M:DesafioRadix.Controllers.ReviewController.GetReviewsByBookId(System.Int64,System.Int32,System.Int32)">
+            <summary>
+            Find all reviews from a specific book, with pagination
+            </summary>
+            <param name="bookId"></param>
+            <param name="count"></param>
+            <param name="page"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DesafioRadix.Controllers.ReviewController.GetReviewsByReviewAuthorName(System.String,System.Int32,System.Int32)">
+            <summary>
+            Find reviews by review author's name, with pagination
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.ReviewController.GetReviewsByBookAuthorName(System.String,System.Int32,System.Int32)">
+            <summary>
+            Find reviews by books author's name, with pagination
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.ReviewController.GetReviewsByBookISBN(System.String,System.Int32,System.Int32)">
+            <summary>
+            Find reviews by books ISBN, with pagination
+            </summary>
+        </member>
+        <member name="M:DesafioRadix.Controllers.ReviewController.Create(DesafioRadix.Models.DTOs.ReviewDTO)">
+            <summary>
+            Create a new review
+            </summary>
+            <param name="requestReviewDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DesafioRadix.Controllers.ReviewController.Update(System.Int64,DesafioRadix.Models.DTOs.ReviewDTO)">
+            <summary>
+            Update an existing review
+            </summary>
+            <param name="reviewId"></param>
+            <param name="requestReviewDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DesafioRadix.Controllers.ReviewController.Delete(System.Int64)">
+            <summary>
+            Delete a review
+            </summary>
+            <param name="reviewId"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
