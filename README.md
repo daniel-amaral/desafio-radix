@@ -8,10 +8,11 @@ Desenvolvido por **Daniel Amaral**.
 Para rodar a aplicação, basta ter o Docker instalado na sua máquina.
 
 ## Instalação e execução
+
 ```
-git clone https://github.com/daniel-amaral/desafio-radix.git
-cd desafio-radix
-docker-compose up
+> git clone https://github.com/daniel-amaral/desafio-radix.git
+> cd desafio-radix
+> docker-compose up
 ```
 Depois de alguns minutos, após a construção dos containers pelo Docker, a API já estará rodando. Se for a primeira vez que o sistema é executado, alguns dados serão mockados automaticamente.
 
@@ -19,3 +20,7 @@ Acesse a página gerada pelo Swagger para conferir todos os endpoints e seus con
 
 
 ![Swagger](https://github.com/daniel-amaral/desafio-radix/blob/master/web-api/swagger-screen.PNG)
+
+
+
+Obrigado! **:)**
