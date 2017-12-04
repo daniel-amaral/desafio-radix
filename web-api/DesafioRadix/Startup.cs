@@ -43,10 +43,11 @@ namespace DesafioRadix
             // in memory database:
             //services.AddDbContext<DesafioRadixContext>(opt => opt.UseInMemoryDatabase("DesafioRadix"));
 
+            /*
             services.AddDbContext<DesafioRadixContext>(options =>
                 options.UseMySql(connectionString));
+            */
 
-            /*
             services.AddDbContext<DesafioRadixContext>(options =>
                         options.UseMySql(connectionString, mySqlOptionsAction: sqlOptions =>
                         {
@@ -55,7 +56,6 @@ namespace DesafioRadix
                             maxRetryDelay: TimeSpan.FromSeconds(20),
                             errorNumbersToAdd: null);
                         }));
-            */
             
             services.AddMvc();
 
