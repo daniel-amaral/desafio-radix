@@ -13,4 +13,5 @@ RUN dotnet publish -c Release -o out
 FROM microsoft/aspnetcore:2.0
 WORKDIR /app
 COPY --from=build-env /app/out .
+COPY bin/Debug/netcoreapp2.0/DesafioRadix.xml /app/DesafioRadix.xml
 ENTRYPOINT ["dotnet", "DesafioRadix.dll"]

@@ -3,17 +3,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Swashbuckle.AspNetCore.SwaggerUI;
 using DesafioRadix.Models;
-using DesafioRadix.Models.Entities;
 using Microsoft.Extensions.Configuration;
-using DesafioRadix.Models.DTOs;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.PlatformAbstractions;
+using MySql.Data.MySqlClient;
 
 /*
 using MySqlDotnetCore.Data;
@@ -28,7 +23,7 @@ namespace DesafioRadix
     public class Startup
     {
         public IConfiguration Configuration { get; private set; }
-        
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,15 +32,34 @@ namespace DesafioRadix
 
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString;
+
+            string localConectionStr = Configuration.GetConnectionString("Local");
+            string dockerFromExternalConectionStr = Configuration.GetConnectionString("DockerFromExternal");
+            string withinDockerConectionStr = Configuration.GetConnectionString("WithinDocker");
+
+            connectionString = withinDockerConectionStr;
+            
             // in memory database:
             //services.AddDbContext<DesafioRadixContext>(opt => opt.UseInMemoryDatabase("DesafioRadix"));
 
             services.AddDbContext<DesafioRadixContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseMySql(connectionString));
 
+            /*
+            services.AddDbContext<DesafioRadixContext>(options =>
+                        options.UseMySql(connectionString, mySqlOptionsAction: sqlOptions =>
+                        {
+                            sqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 15,
+                            maxRetryDelay: TimeSpan.FromSeconds(20),
+                            errorNumbersToAdd: null);
+                        }));
+            */
+            
             services.AddMvc();
-            
-            
+
+
             // Register the Swagger generator:
             services.AddSwaggerGen(c =>
             {
@@ -76,56 +90,13 @@ namespace DesafioRadix
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c 
+            app.UseSwaggerUI(c
                 => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DesafioRadix - API v1"));
 
-            LoadMockedJsonDataToDatabase(context);
+            DbInitializer dbInitializer = new DbInitializer(context);
+            dbInitializer.Run();
         }
 
-        private static void LoadMockedJsonDataToDatabase(DesafioRadixContext context)
-        {
-            int numOfBooksInDatabase = context.Books.Count();
-            if (numOfBooksInDatabase > 0)
-            {
-                Console.WriteLine("Database contains data. No mocking required.");
-                return;
-            }
-
-            Console.WriteLine("Database contains no data. Starting mocking...");
-
-            StreamReader streamReader;
-            List<Book> books;
-            List<ReviewDTO> reviewDTOs;
-
-            var settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                MissingMemberHandling = MissingMemberHandling.Ignore
-            };
-
-            streamReader = new StreamReader("daniel_mocked_data/books_mocked_data.json");
-            string json = streamReader.ReadToEnd();
-            books = JsonConvert.DeserializeObject<List<Book>>(json, settings);
-
-            streamReader = new StreamReader("daniel_mocked_data/reviews_mocked_data.json");
-            json = streamReader.ReadToEnd();
-            reviewDTOs = JsonConvert.DeserializeObject<List<ReviewDTO>>(json, settings);
-            
-            foreach (Book book in books)
-            {
-                context.Add<Book>(book);
-            }
-            context.SaveChanges();
-
-            foreach (ReviewDTO reviewDTO in reviewDTOs)
-            {
-                Book reviewBook = context.Books.FirstOrDefault(b => b.BookID == reviewDTO.BookID);
-                Review review = reviewDTO.ConvertToReview(reviewBook);
-                context.Add<Review>(review);
-            }
-            context.SaveChanges();
-
-            Console.WriteLine("Mocking finished!");
-        }
+       
     }
 }

@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\mysql-server",
+    "\\web-api",
+    "\\web-api\\DesafioRadix",
+    "\\web-api\\DesafioRadix\\Migrations"
+  ],
+  "SelectedNode": "\\web-api\\DesafioRadix\\appsettings.json",
+  "PreviewInSolutionExplorer": false
+}

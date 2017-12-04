@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+    mysql-server:
+        build: ./mysql-server
+        volumes:
+            - ./mysql-server:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=radix_root
+            - MYSQL_DATABASE=desafio_radix
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=radix_root
+        healthcheck:
+          test: ./mysql-server/healthcheck.sh
+        ports:
+            - "3306:3306"
+    
+    web-api:
+        build: ./web-api/DesafioRadix
+        volumes:
+            - ./web-api:/usr/src/app
+        ports: 
+            - "5000:80"
+        depends_on:
+            - mysql-server
