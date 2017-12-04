@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesafioRadix", "DesafioRadix\DesafioRadix.csproj", "{EF733E1D-D5E2-45F9-9E49-2EFD2378F5BE}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1BBF4340-B595-4B46-A569-F69D3503870A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{EF733E1D-D5E2-45F9-9E49-2EFD2378F5BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF733E1D-D5E2-45F9-9E49-2EFD2378F5BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF733E1D-D5E2-45F9-9E49-2EFD2378F5BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1BBF4340-B595-4B46-A569-F69D3503870A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1BBF4340-B595-4B46-A569-F69D3503870A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1BBF4340-B595-4B46-A569-F69D3503870A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1BBF4340-B595-4B46-A569-F69D3503870A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
