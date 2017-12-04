@@ -1,1 +1,1 @@
-mysql-server/*.sh eol=crlf
+mysql-server/ eol=crlf
