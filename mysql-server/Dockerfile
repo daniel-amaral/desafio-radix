@@ -20,6 +20,7 @@ ARG PACKAGE_URL_SHELL=https://repo.mysql.com/yum/mysql-tools-community/el/7/x86_
 # Install server
 RUN rpmkeys --import https://repo.mysql.com/RPM-GPG-KEY-mysql \
   && yum install -y $PACKAGE_URL $PACKAGE_URL_SHELL libpwquality \
+  $$ yum install -y dos2unix \
   && yum clean all \
   && mkdir /docker-entrypoint-initdb.d
 
@@ -27,7 +28,6 @@ VOLUME /var/lib/mysql
 COPY docker-entrypoint.sh /entrypoint.sh
 COPY healthcheck.sh /healthcheck.sh
 
-RUN yum install -y dos2unix
 RUN dos2unix /entrypoint.sh
 RUN dos2unix /healthcheck.sh
 
