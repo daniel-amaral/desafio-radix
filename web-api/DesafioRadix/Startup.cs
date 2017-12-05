@@ -44,19 +44,10 @@ namespace DesafioRadix
             //services.AddDbContext<DesafioRadixContext>(opt => opt.UseInMemoryDatabase("DesafioRadix"));
 
             /*
-            services.AddDbContext<DesafioRadixContext>(options =>
-                options.UseMySql(connectionString));
             */
-
             services.AddDbContext<DesafioRadixContext>(options =>
-                        options.UseMySql(connectionString, mySqlOptionsAction: sqlOptions =>
-                        {
-                            sqlOptions.EnableRetryOnFailure(
-                            maxRetryCount: 15,
-                            maxRetryDelay: TimeSpan.FromSeconds(20),
-                            errorNumbersToAdd: null);
-                        }));
-            
+                options.UseMySql(connectionString, opt => opt.EnableRetryOnFailure()));
+
             services.AddMvc();
 
 
@@ -82,8 +73,18 @@ namespace DesafioRadix
             // create database if not already created
             var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
             var context = serviceScope.ServiceProvider.GetRequiredService<DesafioRadixContext>();
-            context.Database.Migrate();
 
+            try
+            {
+                context.Database.Migrate();
+            }
+            #pragma warning disable CS0168 // Variable is declared but never used
+            catch (MySqlException e)
+            {
+                // just to prevent undesirable full log on screen
+                throw e;
+            }
+            
             app.UseMvc();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
@@ -95,6 +96,7 @@ namespace DesafioRadix
 
             DbInitializer dbInitializer = new DbInitializer(context);
             dbInitializer.Run();
+            Console.WriteLine("Application started");
         }
 
        
